@@ -178,7 +178,9 @@ export default function App() {
           return (
             <section key={cliente} className="mb-10">
               <h2 className="text-xl font-semibold mb-4">{cliente}</h2>
-              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6 md:gap-10 lg:gap-20 rounded-xl">
+              <div
+                className={`grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-y-5 gap-x-20 rounded-xl`}
+              >
                 {filteredJobs.map((job) => (
                   <JobCard
                     key={job.nome_job}
