@@ -14,6 +14,8 @@ export default function App() {
   const [empresaFilter, setEmpresaFilter] = useState("");
   const [statusActive, setStatusActive] = useState(false);
   const [statusInactive, setStatusInactive] = useState(false);
+  const [logsSuccessFilter, setLogsSuccessFilter] = useState(false);
+  const [logsFailFilter, setLogsFailFilter] = useState(false);
   const [filterOpen, setFilterOpen] = useState(false);
   const [jobsByClient, setJobsByClient] = useState({});
   const filterRef = useRef(null);
@@ -91,58 +93,90 @@ export default function App() {
           </button>
 
           {filterOpen && (
-            <div className="relative">
+            <div className="absolute right-0 mt-2 w-70 bg-white border border-gray-300 rounded-xl shadow-lg p-4 z-50 grid grid-cols-2">
               <div
                 className="absolute bg-white shadow-md"
                 style={{
                   width: "26px",
                   height: "14px",
                   clipPath: "polygon(50% 0%, 0% 100%, 100% 100%)",
-
+                  top: "-8px",
                   right: "6px",
                   zIndex: 51,
                 }}
               />
-              <div className="absolute right-0 mt-2 w-36 bg-white border border-gray-300 rounded-lg shadow-lg p-4 z-50">
-                <label className="flex items-center gap-2 mb-3 cursor-pointer select-none">
-                  <input
-                    type="checkbox"
-                    checked={statusActive}
-                    onChange={() => setStatusActive((prev) => !prev)}
-                    className="hidden"
-                    id="ativo"
-                  />
-                  <span
-                    className={`w-5 h-5 flex items-center justify-center rounded-sm border-2 ${
-                      statusActive
-                        ? "bg-yellow-400 border-yellow-400"
-                        : "border-gray-400"
-                    }`}
+              <div className="space-y-3 font-medium text-gray-700">
+                {[
+                  {
+                    label: "Ativo",
+                    checked: statusActive,
+                    onChange: setStatusActive,
+                  },
+                  {
+                    label: "Inativo",
+                    checked: statusInactive,
+                    onChange: setStatusInactive,
+                  },
+                ].map(({ label, checked, onChange }) => (
+                  <label
+                    key={label}
+                    className="flex items-center cursor-pointer select-none gap-2 relative"
                   >
-                    {statusActive && <MdCheck className="text-white" />}
-                  </span>
-                  <span className="text-gray-700 font-medium">Ativo</span>
-                </label>
+                    <input
+                      type="checkbox"
+                      checked={checked}
+                      onChange={() => onChange((v) => !v)}
+                      className="absolute opacity-0 w-5 h-5 cursor-pointer"
+                    />
+                    <div
+                      className={`w-5 h-5 border-2 rounded flex items-center justify-center pointer-events-none ${
+                        checked
+                          ? "bg-yellow-400 border-yellow-400"
+                          : "border-gray-400"
+                      }`}
+                    >
+                      {checked && <MdCheck className="text-white" size={20} />}
+                    </div>
+                    <span>{label}</span>
+                  </label>
+                ))}
+              </div>
 
-                <label className="flex items-center gap-2 cursor-pointer select-none">
-                  <input
-                    type="checkbox"
-                    checked={statusInactive}
-                    onChange={() => setStatusInactive((prev) => !prev)}
-                    className="hidden"
-                    id="inativo"
-                  />
-                  <span
-                    className={`w-5 h-5 flex items-center justify-center rounded-sm border-2 ${
-                      statusInactive
-                        ? "bg-yellow-400 border-yellow-400"
-                        : "border-gray-400"
-                    }`}
+              <div className="space-y-3 font-medium text-gray-700">
+                {[
+                  {
+                    label: "Logs OK",
+                    checked: logsSuccessFilter,
+                    onChange: setLogsSuccessFilter,
+                  },
+                  {
+                    label: "Logs Falha",
+                    checked: logsFailFilter,
+                    onChange: setLogsFailFilter,
+                  },
+                ].map(({ label, checked, onChange }) => (
+                  <label
+                    key={label}
+                    className="flex items-center cursor-pointer select-none gap-2 relative"
                   >
-                    {statusInactive && <MdCheck className="text-white" />}
-                  </span>
-                  <span className="text-gray-700 font-medium">Inativo</span>
-                </label>
+                    <input
+                      type="checkbox"
+                      checked={checked}
+                      onChange={() => onChange((v) => !v)}
+                      className="absolute opacity-0 w-5 h-5 cursor-pointer"
+                    />
+                    <div
+                      className={`w-5 h-5 border-2 rounded flex items-center justify-center pointer-events-none ${
+                        checked
+                          ? "bg-yellow-400 border-yellow-400"
+                          : "border-gray-400"
+                      }`}
+                    >
+                      {checked && <MdCheck className="text-white" size={20} />}
+                    </div>
+                    <span>{label}</span>
+                  </label>
+                ))}
               </div>
             </div>
           )}
@@ -156,21 +190,42 @@ export default function App() {
         />
       </div>
 
-      <main className="pt-20 max-w-7xl mx-auto">
+      <main className="pt-10 max-w-7xl mx-auto">
+        <section className="mb-10">
+          <h2 className="text-2xl font-semibold mb-1 text-gray-700">
+            Dashboard Jobs Bacula
+          </h2>
+          <div
+            style={{ width: "75%" }}
+            className="w-full h-px bg-gray-400 mb-30"
+          ></div>
+        </section>
         {Object.entries(jobsByClient).map(([cliente, clientJobs]) => {
           const filteredJobs = clientJobs.filter((job) => {
-            const matchesEmpresa =
-              empresaFilter === "" ||
-              job.empresa?.toLowerCase().includes(empresaFilter.toLowerCase());
+            if (
+              empresaFilter !== "" &&
+              !job.empresa?.toLowerCase().includes(empresaFilter.toLowerCase())
+            ) {
+              return false;
+            }
 
-            const hasStatusFilter = statusActive || statusInactive;
+            if (statusActive && String(job.status).toLowerCase() !== "true")
+              return false;
+            if (statusInactive && String(job.status).toLowerCase() === "true")
+              return false;
 
-            const matchesStatus =
-              !hasStatusFilter ||
-              (statusActive && job.status === true) ||
-              (statusInactive && job.status === false);
+            const jobLogs = logsMap[job.nome_job] || [];
+            const hasSuccessLogs = jobLogs.some(
+              (log) => log.status_final === "OK"
+            );
+            const hasFailLogs = jobLogs.some(
+              (log) => log.status_final !== "OK"
+            );
 
-            return matchesEmpresa && matchesStatus;
+            if (logsSuccessFilter && !hasSuccessLogs) return false;
+            if (logsFailFilter && !hasFailLogs) return false;
+
+            return true;
           });
 
           if (filteredJobs.length === 0) return null;
