@@ -54,7 +54,7 @@ export default function JobCard({ job, logs }) {
               className="bg-red-600 text-white text-xs px-2 py-1 rounded-full cursor-pointer hover:bg-red-700 flex items-center gap-1 select-none"
               title="Mostrar falhas"
             >
-              <HiOutlineDocumentText /> {failLogs.length}
+              <HiOutlineDocumentText className="w-4 h-4"/> {failLogs.length}
             </div>
           )}
 
@@ -64,7 +64,7 @@ export default function JobCard({ job, logs }) {
               className="bg-blue-600 text-white text-xs px-2 py-1 rounded-full cursor-pointer hover:bg-blue-700 flex items-center gap-1 select-none"
               title="Mostrar sucessos"
             >
-              <HiOutlineDocumentText /> {successLogs.length}
+              <HiOutlineDocumentText className="w-4 h-4"/> {successLogs.length}
             </div>
           )}
         </div>

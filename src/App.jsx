@@ -93,7 +93,7 @@ export default function App() {
           </button>
 
           {filterOpen && (
-            <div className="absolute right-0 mt-2 w-70 bg-white border border-gray-300 rounded-xl shadow-lg p-4 z-50 grid grid-cols-2">
+            <div className="absolute right-0 mt-2 w-59 bg-white border border-gray-300 rounded-xl shadow-lg p-4 z-50 flex gap-4">
               <div
                 className="absolute bg-white shadow-md"
                 style={{
