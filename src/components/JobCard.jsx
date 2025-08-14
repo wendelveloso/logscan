@@ -19,6 +19,30 @@ export default function JobCard({ job, logs }) {
   const failLogs = logs.filter((log) => log.status_final !== "OK");
   const hasAnyLogs = logs.length > 0;
 
+  function ScrollText({ text, maxWidth = "200px" }) {
+    const ref = useRef(null);
+    const [showScrollHint, setShowScrollHint] = useState(false);
+
+    useEffect(() => {
+      const el = ref.current;
+      if (el) setShowScrollHint(el.scrollWidth > el.clientWidth);
+    }, [text]);
+
+    return (
+      <div className="relative" style={{ maxWidth }}>
+        <div
+          ref={ref}
+          className="overflow-x-auto whitespace-nowrap hide-scrollbar "
+        >
+          {text}
+        </div>
+        {showScrollHint && (
+          <div className="absolute top-0 right-0 h-full w-6 bg-gradient-to-l from-gray-100 to-transparent pointer-events-none" />
+        )}
+      </div>
+    );
+  }
+
   function openModalWithFilter(type) {
     setFilter(type);
     setShowModal(true);
@@ -57,7 +81,6 @@ export default function JobCard({ job, logs }) {
               <HiOutlineDocumentText className="w-4 h-4" /> {failLogs.length}
             </div>
           )}
-
           {successLogs.length > 0 && (
             <div
               onClick={() => openModalWithFilter("success")}
@@ -73,39 +96,45 @@ export default function JobCard({ job, logs }) {
       <div className="space-y-1 text-gray-700 text-sm">
         <p className="flex items-center gap-2 mt-6 text-sm">
           <MdBusiness className="text-purple-500" />
-          <strong>Empresa:</strong> {job.empresa}
+          <strong>Empresa:</strong>
+          <ScrollText text={job.empresa} maxWidth="180px" />
+        </p>
+
+        <p className="flex items-center gap-2">
+          <MdComputer className="text-blue-500" />
+          <strong>Cliente:</strong>
+          <ScrollText text={job.cliente} maxWidth="180px" />
         </p>
         <p className="flex items-center gap-2">
-          <MdComputer className="text-blue-500" /> <strong>Cliente:</strong>{" "}
-          {job.cliente}
+          <HiOutlineDocumentText className="text-gray-500" />
+          <strong>Job:</strong>
+          <ScrollText text={job.nome_job} maxWidth="180px" />
+        </p>
+
+        <p className="flex items-center gap-2">
+          <MdStorage className="text-indigo-500" />
+          <strong>IP:</strong>
+          <ScrollText text={job.ip} maxWidth="180px" />
         </p>
         <p className="flex items-center gap-2">
-          <HiOutlineDocumentText className="text-gray-500" />{" "}
-          <strong>Job:</strong> {job.nome_job}
+          <MdAccessTime className="text-orange-500" />
+          <strong>Agendado:</strong>
+          <ScrollText text={job.horario_agendado} maxWidth="180px" />
         </p>
-        <p className="flex items-center gap-2">
-          <MdStorage className="text-indigo-500" /> <strong>IP:</strong>{" "}
-          {job.ip}
-        </p>
-        <p className="flex items-center gap-2">
-          <MdAccessTime className="text-orange-500" />{" "}
-          <strong>Agendado:</strong> {job.horario_agendado}
-        </p>
-        <div className="flex items-center gap-1 max-w-full">
+        <div className="flex items-center gap-2 max-w-full">
           <MdStorage className="text-green-500 flex-shrink-0" />
           <strong>Fileset:</strong>
-          <div
-            className="overflow-x-auto max-w-full whitespace-nowrap scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-200"
-            style={{ maxWidth: "calc(100% - 80px)" }}
-          >
-            {job.file_set}
-          </div>
+          <ScrollText text={job.file_set} maxWidth="calc(100% - 80px)" />
         </div>
-        <p>
-          <strong>Diff:</strong> {job.retencao_diff}
+
+        <p className="flex items-center gap-1">
+          <strong>Diff:</strong>
+          <ScrollText text={job.retencao_diff} maxWidth="180px" />
         </p>
-        <p>
-          <strong>Full:</strong> {job.retencao_full}
+
+        <p className="flex items-center gap-1">
+          <strong>Full:</strong>
+          <ScrollText text={job.retencao_full} maxWidth="180px" />
         </p>
       </div>
 
@@ -159,14 +188,14 @@ export default function JobCard({ job, logs }) {
                   </p>
                   <p>{log.status_final === "OK" ? "✅ Sucesso" : "❌ Falha"}</p>
                 </div>
-                <div className="text-right text-gray-400 font-mono ml-4 flex flex-col justify-between">
+                <div className="text-right text-gray-400 font-mono ml-4 flex flex-col justify-between max-w-full overflow-x-auto whitespace-nowrap">
                   <div>
                     <p>
                       <strong>Job ID</strong>
                     </p>
                     <p>{log.job_id}</p>
                   </div>
-                  <div className="mt-2 text-gray-600 font-normal">
+                  <div className="mt-2 text-gray-600 font-normal ">
                     <p>{log.nome_job}</p>
                   </div>
                 </div>

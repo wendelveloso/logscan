@@ -8,6 +8,13 @@ body {
   font-variation-settings: "wdth" 100;
   background-color: #d1d5dc;
 }
+.hide-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
 
 .scrollbar-thin {
   scrollbar-width: thin;
@@ -40,4 +47,21 @@ body {
 
 .animate-fadeIn {
   animation: fadeIn 0.2s ease-out forwards;
+}
+
+@keyframes slide-hint {
+  0% {
+    transform: translateX(0);
+  }
+  50% {
+    transform: translateX(-10px);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+
+.scroll-hint {
+  display: inline-block;
+  animation: slide-hint 1.5s ease-in-out infinite;
 }
