@@ -7,6 +7,7 @@ export default function Header() {
             src="/logomarca-xlogic.png"
             alt="Logo"
             className="h-12"
+            onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
           />
         </div>
       </div>
