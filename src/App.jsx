@@ -4,7 +4,13 @@ import { ErrorModal } from "./components/ErrorModal";
 import JobCard from "./components/JobCard";
 import Header from "./components/Header";
 import { supabase } from "../supabaseClient";
-import { MdFilterList, MdCheck } from "react-icons/md";
+import {
+  MdFilterList,
+  MdCheck,
+  MdExpandLess,
+  MdExpandMore,
+  MdPictureAsPdf,
+} from "react-icons/md";
 
 export default function App() {
   const [jobs, setJobs] = useState([]);
@@ -18,6 +24,7 @@ export default function App() {
   const [logsFailFilter, setLogsFailFilter] = useState(false);
   const [filterOpen, setFilterOpen] = useState(false);
   const [jobsByClient, setJobsByClient] = useState({});
+  const [expandedCompanies, setExpandedCompanies] = useState({});
   const filterRef = useRef(null);
 
   useEffect(() => {
@@ -64,8 +71,8 @@ export default function App() {
 
         const grouped = {};
         jobsData.forEach((job) => {
-          if (!grouped[job.cliente]) grouped[job.cliente] = [];
-          grouped[job.cliente].push(job);
+          if (!grouped[job.empresa]) grouped[job.empresa] = [];
+          grouped[job.empresa].push(job);
         });
         setJobsByClient(grouped);
 
@@ -77,6 +84,21 @@ export default function App() {
     }
     fetchData();
   }, []);
+
+  useEffect(() => {
+    const initialExpanded = {};
+    Object.keys(jobsByClient).forEach((empresa) => {
+      initialExpanded[empresa] = true;
+    });
+    setExpandedCompanies(initialExpanded);
+  }, [jobsByClient]);
+
+  const toggleCompany = (empresa) => {
+    setExpandedCompanies((prev) => ({
+      ...prev,
+      [empresa]: !prev[empresa],
+    }));
+  };
 
   return (
     <div className="min-h-screen w-screen bg-gray-300 pt-16 px-4">
@@ -190,7 +212,7 @@ export default function App() {
         />
       </div>
 
-      <main className="pt-10 max-w-7xl mx-auto">
+      <main className="pt-10 mx-auto" style={{ maxWidth: "1300px" }}>
         <section className="mb-10">
           <h2 className="text-2xl font-semibold mb-1 text-gray-700">
             Dashboard Jobs Bacula
@@ -200,8 +222,9 @@ export default function App() {
             className="w-full h-px bg-gray-400 mb-30"
           ></div>
         </section>
-        {Object.entries(jobsByClient).map(([cliente, clientJobs]) => {
-          const filteredJobs = clientJobs.filter((job) => {
+
+        {Object.entries(jobsByClient).map(([empresa, companyJobs]) => {
+          const filteredJobs = companyJobs.filter((job) => {
             if (
               empresaFilter !== "" &&
               !job.empresa?.toLowerCase().includes(empresaFilter.toLowerCase())
@@ -231,18 +254,47 @@ export default function App() {
           if (filteredJobs.length === 0) return null;
 
           return (
-            <section key={cliente} className="mb-10">
-              <h2 className="text-xl font-semibold mb-4">{cliente}</h2>
-              <div
-                className={`grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-y-5 gap-x-20 rounded-xl`}
-              >
-                {filteredJobs.map((job) => (
-                  <JobCard
-                    key={job.nome_job}
-                    job={job}
-                    logs={logsMap[job.nome_job] || []}
-                  />
-                ))}
+            <section key={empresa} className="mb-10 w-full">
+              <div className="flex flex-col w-full">
+                <div
+                  className="flex items-center justify-between border border-gray-700 rounded-xl px-4 py-3 cursor-pointer w-full"
+                  style={{ backgroundColor: "transparent" }}
+                  onClick={() => toggleCompany(empresa)}
+                >
+                  <h2 className="text-xl font-semibold text-gray-700">
+                    {empresa}
+                  </h2>
+
+                  <div className="flex items-center gap-1">
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        gerarPdf(empresa);
+                      }}
+                      className="flex items-center justify-center px-3 py-1 bg-yellow-500 hover:bg-yellow-600 text-white font-semibold rounded cursor-pointer"
+                    >
+                      <MdPictureAsPdf size={18} />
+                    </button>
+
+                    {expandedCompanies[empresa] !== false ? (
+                      <MdExpandLess size={24} className="text-gray-700" />
+                    ) : (
+                      <MdExpandMore size={24} className="text-gray-700" />
+                    )}
+                  </div>
+                </div>
+
+                {expandedCompanies[empresa] !== false && (
+                  <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-y-4 gap-x-4  mt-4 w-full">
+                    {filteredJobs.map((job) => (
+                      <JobCard
+                        key={job.nome_job}
+                        job={job}
+                        logs={logsMap[job.nome_job] || []}
+                      />
+                    ))}
+                  </div>
+                )}
               </div>
             </section>
           );

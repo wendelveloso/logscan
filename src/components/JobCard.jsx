@@ -45,7 +45,7 @@ export default function JobCard({ job, logs }) {
     filter === "fail" ? failLogs : filter === "success" ? successLogs : logs;
 
   return (
-    <div className="relative bg-gradient-to-b from-gray-100 to-gray-200 shadow-md hover:shadow-lg transition rounded-xl p-5 w-80 border border-gray-100 flex flex-col gap-4">
+    <div className="relative bg-gradient-to-b from-gray-100 to-gray-200 shadow-md hover:shadow-lg transition rounded-xl p-5 w-78 border border-gray-100 flex flex-col gap-4">
       {(hasAnyLogs || failLogs.length > 0) && (
         <div className="absolute top-3 right-3 flex gap-2">
           {failLogs.length > 0 && (
@@ -54,7 +54,7 @@ export default function JobCard({ job, logs }) {
               className="bg-red-600 text-white text-xs px-2 py-1 rounded-full cursor-pointer hover:bg-red-700 flex items-center gap-1 select-none"
               title="Mostrar falhas"
             >
-              <HiOutlineDocumentText className="w-4 h-4"/> {failLogs.length}
+              <HiOutlineDocumentText className="w-4 h-4" /> {failLogs.length}
             </div>
           )}
 
@@ -64,7 +64,7 @@ export default function JobCard({ job, logs }) {
               className="bg-blue-600 text-white text-xs px-2 py-1 rounded-full cursor-pointer hover:bg-blue-700 flex items-center gap-1 select-none"
               title="Mostrar sucessos"
             >
-              <HiOutlineDocumentText className="w-4 h-4"/> {successLogs.length}
+              <HiOutlineDocumentText className="w-4 h-4" /> {successLogs.length}
             </div>
           )}
         </div>
