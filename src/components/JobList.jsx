@@ -1,6 +1,8 @@
 import JobCard from "./JobCard.jsx";
 import { MdExpandLess, MdExpandMore, MdPictureAsPdf } from "react-icons/md";
 import { gerarPdfA4 } from "./services/pdf/pdfService.js";
+import { useState } from "react";
+import PdfNoteModal from "./Modals/PdfNoteModal.jsx";
 
 export default function JobList({
   jobsByClient,
@@ -9,6 +11,9 @@ export default function JobList({
   toggleCompany,
   filters,
 }) {
+  const [selectedEmpresa, setSelectedEmpresa] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
   const {
     empresaFilter,
     statusActive,
@@ -17,14 +22,13 @@ export default function JobList({
     logsFailFilter,
   } = filters;
 
-  const handleGerarPDF = (empresa) => {
+  const handleGerarPDF = (empresa, note = "") => {
     const companyJobs = jobsByClient[empresa] || [];
-
     const companyLogs = companyJobs.flatMap(
       (job) => logsMap[job.nome_job] || []
     );
 
-    gerarPdfA4(empresa, companyJobs, companyLogs);
+    gerarPdfA4(empresa, companyJobs, companyLogs, note);
   };
 
   return (
@@ -76,7 +80,8 @@ export default function JobList({
                   <button
                     onClick={(e) => {
                       e.stopPropagation();
-                      handleGerarPDF(empresa);
+                      setSelectedEmpresa(empresa);
+                      setIsModalOpen(true);
                     }}
                     className="flex items-center justify-center px-3 py-1 bg-yellow-500 hover:bg-yellow-600 text-white font-semibold rounded cursor-pointer"
                   >
@@ -106,6 +111,15 @@ export default function JobList({
           </section>
         );
       })}
+
+      <PdfNoteModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        onConfirm={(note) => {
+          handleGerarPDF(selectedEmpresa, note);
+          setIsModalOpen(false);
+        }}
+      />
     </>
   );
 }

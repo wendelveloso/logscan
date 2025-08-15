@@ -2,7 +2,6 @@ import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
 
 import latoBlackBase64 from "./fonts/Lato-Black.base64";
-
 import iconJobs from "./icons/jobs";
 import iconActive from "./icons/active";
 import iconInactive from "./icons/inactive";
@@ -55,7 +54,7 @@ function displayFrom(str) {
   return str;
 }
 
-export function gerarPdfA4(empresa, jobs = [], logs = []) {
+export function gerarPdfA4(empresa, jobs = [], logs = [], notaUsuario = "") {
   const doc = new jsPDF({ orientation: "portrait", unit: "pt" });
   const pageWidth = doc.internal.pageSize.getWidth();
 
@@ -276,17 +275,19 @@ export function gerarPdfA4(empresa, jobs = [], logs = []) {
   const obsY = doc.lastAutoTable.finalY + 20;
   doc.setDrawColor("#ccc");
   doc.setLineWidth(0.5);
-  doc.rect(40, obsY, pageWidth - 80, 60);
+  doc.rect(40, obsY, pageWidth - 80, 70);
   doc.setFontSize(12);
   doc.setTextColor("#333");
   doc.text("Notas:", 50, obsY + 20);
   doc.setFontSize(10);
   doc.setTextColor("#555");
-  doc.text(
-    "Recomenda-se verificar os jobs inativos e corrigir possíveis falhas de execução.",
-    50,
-    obsY + 40
-  );
+
+  const notaFinal =
+    notaUsuario && notaUsuario.trim() !== ""
+      ? notaUsuario
+      : "Sem observações adicionais.";
+
+  doc.text(notaFinal, 50, obsY + 40, { maxWidth: pageWidth - 90 });
 
   const pdfBlob = doc.output("blob");
   const url = URL.createObjectURL(pdfBlob);
