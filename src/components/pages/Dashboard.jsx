@@ -78,7 +78,7 @@ export default function Dashboard() {
           <h2 className="text-2xl font-semibold mb-1 text-gray-700">
             Dashboard Jobs Bacula
           </h2>
-          <div className="w-8/10 h-px bg-gray-400 mb-30"></div>
+          <div className="w-7/10 h-px bg-gray-400 mb-30"></div>
         </section>
 
         <JobList

@@ -288,5 +288,7 @@ export function gerarPdfA4(empresa, jobs = [], logs = []) {
     obsY + 40
   );
 
-  doc.output("dataurlnewwindow");
+  const pdfBlob = doc.output("blob");
+  const url = URL.createObjectURL(pdfBlob);
+  window.open(url, "_blank");
 }

@@ -1,12 +1,12 @@
 import JobCard from "./JobCard.jsx";
 import { MdExpandLess, MdExpandMore, MdPictureAsPdf } from "react-icons/md";
+import { gerarPdfA4 } from "./services/pdf/pdfService.js";
 
 export default function JobList({
   jobsByClient,
   logsMap,
   expandedCompanies,
   toggleCompany,
-  gerarPdf,
   filters,
 }) {
   const {
@@ -16,6 +16,16 @@ export default function JobList({
     logsSuccessFilter,
     logsFailFilter,
   } = filters;
+
+  const handleGerarPDF = (empresa) => {
+    const companyJobs = jobsByClient[empresa] || [];
+
+    const companyLogs = companyJobs.flatMap(
+      (job) => logsMap[job.nome_job] || []
+    );
+
+    gerarPdfA4(empresa, companyJobs, companyLogs);
+  };
 
   return (
     <>
@@ -61,16 +71,18 @@ export default function JobList({
                     {empresa}
                   </h2>
                 </div>
+
                 <div className="flex items-center gap-1">
                   <button
                     onClick={(e) => {
                       e.stopPropagation();
-                      gerarPdf(empresa);
+                      handleGerarPDF(empresa);
                     }}
                     className="flex items-center justify-center px-3 py-1 bg-yellow-500 hover:bg-yellow-600 text-white font-semibold rounded cursor-pointer"
                   >
                     <MdPictureAsPdf size={18} />
                   </button>
+
                   {expandedCompanies[empresa] !== false ? (
                     <MdExpandLess size={24} className="text-gray-700" />
                   ) : (
