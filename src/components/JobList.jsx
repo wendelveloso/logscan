@@ -67,7 +67,8 @@ export default function JobList({
           <section key={empresa} className="mb-10 w-full">
             <div className="flex flex-col w-full">
               <div
-                className="flex items-center justify-between border border-gray-700 rounded-xl px-4 py-3 cursor-pointer w-full"
+                style={{ backgroundColor: "#D9DCE0" }}
+                className="flex items-center justify-between border border-gray-700 rounded-xl px-4 py-3 cursor-pointer w-full "
                 onClick={() => toggleCompany(empresa)}
               >
                 <div className="flex flex-col items-center sm:items-start w-full">
@@ -83,7 +84,7 @@ export default function JobList({
                       setSelectedEmpresa(empresa);
                       setIsModalOpen(true);
                     }}
-                    className="flex items-center justify-center px-3 py-1 bg-yellow-500 hover:bg-yellow-600 text-white font-semibold rounded cursor-pointer"
+                    className="flex items-center justify-center px-3 py-1 bg-yellow-500 hover:bg-yellow-600 text-white font-semibold rounded cursor-pointer hover-transition"
                   >
                     <MdPictureAsPdf size={18} />
                   </button>
@@ -96,8 +97,14 @@ export default function JobList({
                 </div>
               </div>
 
-              {expandedCompanies[empresa] !== false && (
-                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-y-4 gap-x-4 mt-4 w-full">
+              <div
+                className={`overflow-hidden transition-all duration-300 ease-in-out ${
+                  expandedCompanies[empresa] !== false
+                    ? "max-h-[2000px] mt-4"
+                    : "max-h-0"
+                }`}
+              >
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-y-4 gap-x-4">
                   {filteredJobs.map((job) => (
                     <JobCard
                       key={job.nome_job}
@@ -106,7 +113,7 @@ export default function JobList({
                     />
                   ))}
                 </div>
-              )}
+              </div>
             </div>
           </section>
         );

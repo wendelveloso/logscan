@@ -273,21 +273,30 @@ export function gerarPdfA4(empresa, jobs = [], logs = [], notaUsuario = "") {
   });
 
   const obsY = doc.lastAutoTable.finalY + 20;
+  const marginX = 40;
+  const notaBoxWidth = pageWidth - 80;
+
+  const notaFinal = notaUsuario?.trim() || "Sem observações adicionais.";
+
+  doc.setFontSize(10);
+
+  const lines = doc.splitTextToSize(notaFinal, notaBoxWidth - 20);
+  const lineHeight = 12;
+  const padding = 10;
+
+  const notaBoxHeight = 15 + lines.length * lineHeight + padding;
+
   doc.setDrawColor("#ccc");
   doc.setLineWidth(0.5);
-  doc.rect(40, obsY, pageWidth - 80, 70);
+  doc.rect(marginX, obsY, notaBoxWidth, notaBoxHeight);
+
   doc.setFontSize(12);
   doc.setTextColor("#333");
-  doc.text("Notas:", 50, obsY + 20);
+  doc.text("Notas:", marginX + 10, obsY + 15);
+
   doc.setFontSize(10);
   doc.setTextColor("#555");
-
-  const notaFinal =
-    notaUsuario && notaUsuario.trim() !== ""
-      ? notaUsuario
-      : "Sem observações adicionais.";
-
-  doc.text(notaFinal, 50, obsY + 40, { maxWidth: pageWidth - 90 });
+  doc.text(lines, marginX + 10, obsY + 30);
 
   const pdfBlob = doc.output("blob");
   const url = URL.createObjectURL(pdfBlob);

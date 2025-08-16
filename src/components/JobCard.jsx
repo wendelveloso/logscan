@@ -75,7 +75,7 @@ export default function JobCard({ job, logs }) {
           {failLogs.length > 0 && (
             <div
               onClick={() => openModalWithFilter("fail")}
-              className="bg-red-600 text-white text-xs px-2 py-1 rounded-full cursor-pointer hover:bg-red-700 flex items-center gap-1 select-none"
+              className="bg-red-600 text-white text-xs px-2 py-1 rounded-full cursor-pointer hover:bg-red-900 flex items-center gap-1 select-none hover-transition"
               title="Mostrar falhas"
             >
               <HiOutlineDocumentText className="w-4 h-4" /> {failLogs.length}
@@ -84,7 +84,7 @@ export default function JobCard({ job, logs }) {
           {successLogs.length > 0 && (
             <div
               onClick={() => openModalWithFilter("success")}
-              className="bg-blue-600 text-white text-xs px-2 py-1 rounded-full cursor-pointer hover:bg-blue-700 flex items-center gap-1 select-none"
+              className="bg-blue-600 text-white text-xs px-2 py-1 rounded-full cursor-pointer hover:bg-blue-800 flex items-center gap-1 select-none hover-transition"
               title="Mostrar sucessos"
             >
               <HiOutlineDocumentText className="w-4 h-4" /> {successLogs.length}

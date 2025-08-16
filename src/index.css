@@ -1,5 +1,9 @@
 @import "tailwindcss";
 
+html {
+  overflow-y: scroll;
+}
+
 body {
   font-family: "Roboto", sans-serif;
   font-optical-sizing: auto;
@@ -8,6 +12,11 @@ body {
   font-variation-settings: "wdth" 100;
   background-color: #d1d5dc;
 }
+
+.hover-transition {
+  transition: all 0.3s ease-in-out;
+}
+
 .hide-scrollbar {
   -ms-overflow-style: none;
   scrollbar-width: none;
@@ -34,6 +43,26 @@ body {
   background-color: #9ca3af;
   border-radius: 4px;
 }
+
+@keyframes shake {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  20%,
+  60% {
+    transform: translateX(-8px);
+  }
+  40%,
+  80% {
+    transform: translateX(8px);
+  }
+}
+
+.shake {
+  animation: shake 0.3s ease;
+}
+
 @keyframes fadeIn {
   from {
     opacity: 0;

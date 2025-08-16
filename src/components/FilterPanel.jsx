@@ -37,13 +37,13 @@ export default function FilterPanel({
         {" "}
         <button
           onClick={() => setFilterOpen((open) => !open)}
-          className="p-2 rounded-xl bg-white border border-gray-300 hover:bg-gray-100 focus:outline-none"
+          className="p-2 rounded-xl bg-white border border-gray-300 hover:bg-gray-200 focus:outline-none hover-transition cursor-pointer"
           aria-label="Abrir filtros de status"
         >
           <MdFilterList size={24} className="text-gray-700" />
         </button>
         {filterOpen && (
-          <div className="absolute right-0 mt-2 w-59 bg-white border border-gray-300 rounded-xl shadow-lg p-4 z-50 flex gap-4">
+          <div className="absolute right-0 mt-2 w-50 bg-white border border-gray-300 rounded-xl shadow-lg p-4 z-50">
             <div
               className="absolute bg-white shadow-md"
               style={{
@@ -51,11 +51,13 @@ export default function FilterPanel({
                 height: "14px",
                 clipPath: "polygon(50% 0%, 0% 100%, 100% 100%)",
                 top: "-8px",
-                right: "6px",
+                right: "12px",
                 zIndex: 51,
               }}
             />
-            <div className="space-y-3 font-medium text-gray-700">
+
+            <div className="space-y-2 font-small text-gray-700 pb-2 border-b border-gray-200">
+              <span className="text-gray-500 uppercase text-xs">Status</span>
               {[
                 {
                   label: "Ativo",
@@ -70,59 +72,68 @@ export default function FilterPanel({
               ].map(({ label, checked, onChange }) => (
                 <label
                   key={label}
-                  className="flex items-center cursor-pointer select-none gap-2 relative"
+                  className="flex items-center gap-2 cursor-pointer"
                 >
                   <input
                     type="checkbox"
                     checked={checked}
-                    onChange={() => onChange((v) => !v)}
-                    className="absolute opacity-0 w-5 h-5 cursor-pointer"
+                    onChange={() => {
+                      if (label === "Ativo") {
+                        setStatusActive(!statusActive);
+                        if (!statusActive) setStatusInactive(false);
+                      } else {
+                        setStatusInactive(!statusInactive);
+                        if (!statusInactive) setStatusActive(false);
+                      }
+                    }}
+                    className="hidden"
                   />
                   <div
-                    className={`w-5 h-5 border-2 rounded flex items-center justify-center pointer-events-none ${
+                    className={`w-5 h-5 border-2 rounded flex items-center justify-center ${
                       checked
                         ? "bg-yellow-400 border-yellow-400"
                         : "border-gray-400"
                     }`}
                   >
-                    {checked && <MdCheck className="text-white" size={20} />}
+                    {checked && <MdCheck className="text-white" size={16} />}
                   </div>
                   <span>{label}</span>
                 </label>
               ))}
             </div>
 
-            <div className="space-y-3 font-medium text-gray-700">
+            <div className="space-y-2 font-small text-gray-700 pt-2">
+              <span className="text-gray-500 uppercase text-xs">Logs</span>
               {[
                 {
-                  label: "Logs OK",
+                  label: "Sucesso",
                   checked: logsSuccessFilter,
                   onChange: setLogsSuccessFilter,
                 },
                 {
-                  label: "Logs Falha",
+                  label: "Falha",
                   checked: logsFailFilter,
                   onChange: setLogsFailFilter,
                 },
               ].map(({ label, checked, onChange }) => (
                 <label
                   key={label}
-                  className="flex items-center cursor-pointer select-none gap-2 relative"
+                  className="flex items-center gap-2 cursor-pointer"
                 >
                   <input
                     type="checkbox"
                     checked={checked}
                     onChange={() => onChange((v) => !v)}
-                    className="absolute opacity-0 w-5 h-5 cursor-pointer"
+                    className="hidden"
                   />
                   <div
-                    className={`w-5 h-5 border-2 rounded flex items-center justify-center pointer-events-none ${
+                    className={`w-5 h-5 border-2 rounded flex items-center justify-center ${
                       checked
                         ? "bg-yellow-400 border-yellow-400"
                         : "border-gray-400"
                     }`}
                   >
-                    {checked && <MdCheck className="text-white" size={20} />}
+                    {checked && <MdCheck className="text-white" size={16} />}
                   </div>
                   <span>{label}</span>
                 </label>

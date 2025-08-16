@@ -57,7 +57,7 @@ export default function Dashboard() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-300 pt-16 px-4">
+    <div className="min-h-screen bg-gray-300 pt-16 px-4 ">
       <Header />
 
       <FilterPanel
@@ -73,8 +73,8 @@ export default function Dashboard() {
         setEmpresaFilter={setEmpresaFilter}
       />
 
-      <main className="pt-10 mx-auto" style={{ maxWidth: "1300px" }}>
-        <section className="mb-10">
+      <main className="pt-10 mx-auto " style={{ maxWidth: "1300px" }}>
+        <section className="mb-10 ">
           <h2 className="text-2xl font-semibold mb-1 text-gray-700">
             Dashboard Jobs Bacula
           </h2>
