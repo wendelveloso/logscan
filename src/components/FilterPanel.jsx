@@ -51,7 +51,7 @@ export default function FilterPanel({
                 height: "14px",
                 clipPath: "polygon(50% 0%, 0% 100%, 100% 100%)",
                 top: "-8px",
-                right: "12px",
+                right: "7px",
                 zIndex: 51,
               }}
             />
