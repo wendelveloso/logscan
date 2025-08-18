@@ -3,6 +3,7 @@ import { MdExpandLess, MdExpandMore, MdPictureAsPdf } from "react-icons/md";
 import { gerarPdfA4 } from "./services/pdf/pdfService.js";
 import { useState } from "react";
 import PdfNoteModal from "./Modals/PdfNoteModal.jsx";
+import { motion } from "framer-motion";
 
 export default function JobList({
   jobsByClient,
@@ -97,14 +98,16 @@ export default function JobList({
                 </div>
               </div>
 
-              <div
-                className={`overflow-hidden transition-all duration-300 ease-in-out ${
-                  expandedCompanies[empresa] !== false
-                    ? "max-h-[2000px] mt-4"
-                    : "max-h-0"
-                }`}
+              <motion.div
+                initial={{ height: 0, opacity: 0 }}
+                animate={{
+                  height: expandedCompanies[empresa] !== false ? "auto" : 0,
+                  opacity: expandedCompanies[empresa] !== false ? 1 : 0,
+                }}
+                transition={{ duration: 0.3 }}
+                className="overflow-hidden"
               >
-                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-y-4 gap-x-4">
+                <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-y-4 gap-x-4">
                   {filteredJobs.map((job) => (
                     <JobCard
                       key={job.nome_job}
@@ -113,7 +116,7 @@ export default function JobList({
                     />
                   ))}
                 </div>
-              </div>
+              </motion.div>
             </div>
           </section>
         );
