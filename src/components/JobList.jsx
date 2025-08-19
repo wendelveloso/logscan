@@ -69,14 +69,27 @@ export default function JobList({
             <div className="flex flex-col w-full">
               <div
                 style={{ backgroundColor: "#D9DCE0" }}
-                className="flex items-center justify-between border border-gray-700 rounded-xl px-4 py-3 cursor-pointer w-full "
+                className="relative flex items-center justify-between border border-gray-700 rounded-xl px-4 py-3 cursor-pointer w-full"
                 onClick={() => toggleCompany(empresa)}
               >
-                <div className="flex flex-col items-center sm:items-start w-full">
-                  <h2 className="text-xl font-semibold text-gray-700 text-center sm:text-left truncate max-w-[200px] sm:max-w-full">
-                    {empresa}
-                  </h2>
-                </div>
+                <h2 className="text-xl font-semibold text-gray-700 truncate max-w-[200px] sm:max-w-full">
+                  {empresa}
+                </h2>
+
+                <motion.span
+                  key={filteredJobs.length}
+                  initial={{ scale: 0.8, opacity: 0 }}
+                  animate={{ scale: 1, opacity: 1 }}
+                  transition={{ type: "spring", stiffness: 200, damping: 15 }}
+                  className="absolute text-xs bg-gray-200 text-gray-700 px-2 py-0.5 rounded-full shadow"
+                  style={{
+                    top: "-0.45rem",
+                    left: "-0.5rem",
+                    transform: "translate(50%, -50%)",
+                  }}
+                >
+                  {filteredJobs.length}
+                </motion.span>
 
                 <div className="flex items-center gap-1">
                   <button
