@@ -4,7 +4,7 @@ export default function Header() {
       <div className="max-w-5xl px-6 py-3 flex items-center">
         <div className="text-blue-600 font-semibold text-xl select-none cursor-default">
           <img
-            src="/logomarca-xlogic.png"
+            src="/logo.png"
             alt="Logo"
             className="h-12 cursor-pointer"
             onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}

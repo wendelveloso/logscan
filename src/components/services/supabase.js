@@ -1,4 +1,4 @@
-import { supabase } from "../../../supabaseClient";
+import { supabase } from "../../../mockSupabase";
 
 export async function fetchJobsAndLogs() {
   const { data: jobsData, error: jobsError } = await supabase

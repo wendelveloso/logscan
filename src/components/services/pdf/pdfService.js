@@ -93,9 +93,10 @@ export function gerarPdfA4(empresa, jobs = [], logs = [], notaUsuario = "") {
   );
 
   const totalJobs = jobs.length;
-  const activeJobs = jobs.filter(
-    (j) => !!j.status || String(j.status).toLowerCase() === "true"
-  ).length;
+const activeJobs = jobs.filter(
+  (j) => j.status === true || String(j.status).toLowerCase() === "true"
+).length;
+
   const inactiveJobs = totalJobs - activeJobs;
   const successJobs = logs.filter(
     (j) => String(j.status_final) === "OK"
@@ -257,7 +258,7 @@ export function gerarPdfA4(empresa, jobs = [], logs = [], notaUsuario = "") {
         ? "Ativo"
         : "Inativo",
       ultimoDisplay,
-      job.createdAt ? new Date(job.createdAt).toLocaleDateString("pt-BR") : "-",
+      job.data_criacao ? new Date(job.data_criacao).toLocaleString("pt-BR") : "-",
     ];
   });
 
